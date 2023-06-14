@@ -12,7 +12,7 @@ export const configs = {
     mongo: {
         username: process.env.CA_MONGO_USERNAME || "root",
         password: process.env.CA_MONGO_PASSWORD || "",
-        dbName: process.env.CA__MONGO_DB_NAME || "auth",
+        dbName: process.env.CA_MONGO_DB_NAME || "auth",
         templateUri:
             "mongodb+srv://${username}:${password}@cluster0.k0fqybm.mongodb.net/${dbName}",
         getUri: function (): string {

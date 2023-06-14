@@ -6,19 +6,20 @@ export async function createTeacher(params: {
     name: string;
     phone: string;
     email: string;
-    specialize: {
-        name: string;
-        coincidence: number;
-    };
+    specialize: [
+        {
+            name: string;
+            coincidence: number;
+        }
+    ];
 }): Promise<Result> {
+    console.log(params);
     const teacher = new Teacher({
         id: v1(),
         name: params.name,
         phone: params.phone,
-        specialize: {
-            name: params.specialize.name,
-            coincidence: params.specialize.coincidence,
-        },
+        email: params.email,
+        specialize: params.specialize,
     });
 
     await teacher.save();

@@ -19,7 +19,7 @@ const teacherSchema = new mongoose.Schema(
             type: String,
             require: true,
         },
-        specialize: {
+        specialize: [{
             name: {
                 type: String,
                 require: true,
@@ -28,7 +28,7 @@ const teacherSchema = new mongoose.Schema(
                 type: Number,
                 require: true,
             },
-        },
+        }],
     },
     { versionKey: false }
 );

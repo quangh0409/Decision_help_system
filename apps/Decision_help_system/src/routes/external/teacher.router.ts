@@ -14,7 +14,6 @@ router.post("/", async (req: Request, _: Response, next: NextFunction) => {
 });
 
 router.get("/", async (req: Request, _: Response, next: NextFunction) => {
-    console.log("vao chua");
     const result = await getAllTeacher();
     next(result);
 });
