@@ -10,9 +10,9 @@ export const configs = {
         port: process.env.CA_PORT_NUMBER || "6808",
     },
     mongo: {
-        username: process.env.CA_MONGO_USERNAME || "root",
-        password: process.env.CA_MONGO_PASSWORD || "",
-        dbName: process.env.CA_MONGO_DB_NAME || "auth",
+        username: process.env.CA_MONGO_USERNAME || "quangvt5",
+        password: process.env.CA_MONGO_PASSWORD || "Qvt29092001.",
+        dbName: process.env.CA_MONGO_DB_NAME || "assignment",
         templateUri:
             "mongodb+srv://${username}:${password}@cluster0.k0fqybm.mongodb.net/${dbName}",
         getUri: function (): string {
