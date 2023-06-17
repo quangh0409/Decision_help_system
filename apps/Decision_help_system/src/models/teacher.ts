@@ -19,16 +19,18 @@ const teacherSchema = new mongoose.Schema(
             type: String,
             require: true,
         },
-        specialize: [{
-            name: {
-                type: String,
-                require: true,
+        specialize: [
+            {
+                name: {
+                    type: String,
+                    require: true,
+                },
+                coincidence: {
+                    type: Number,
+                    require: true,
+                },
             },
-            coincidence: {
-                type: Number,
-                require: true,
-            },
-        }],
+        ],
     },
     { versionKey: false }
 );

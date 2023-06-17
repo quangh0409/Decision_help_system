@@ -1,10 +1,8 @@
-import { Result, ResultSuccess, success } from "app";
-import { IProject, ITeacher } from "../interfaces/models";
+import { ResultSuccess, success } from "app";
 import Project from "../models/project";
 import Teacher from "../models/teacher";
 import { IAssignment } from "../interfaces/models/assignment";
 import { SPECIALIZE } from "../enum/specialize";
-import { isNumberObject } from "util/types";
 import { IArray_Assignment } from "../interfaces/response/assignment.body";
 
 export async function getArraySuitableClothes(): Promise<ResultSuccess> {
@@ -54,8 +52,8 @@ export async function getArraySuitableClothes(): Promise<ResultSuccess> {
         specialize: string,
         size: number
     ): number[] {
-        let maxCompatibility: number = 0;
-        let temp: number = 0;
+        let maxCompatibility = 0;
+        let temp = 0;
 
         // lay ra cac giao vien co so do an < 3
         const teacherCheckSum: number[] = [];
@@ -66,27 +64,8 @@ export async function getArraySuitableClothes(): Promise<ResultSuccess> {
         });
 
         // phan cong giao vien
-        // teachers.forEach((t, index) => {
-        //     let compatibility = 0;
-
-        //     // check giáo viên đó đã nhận đủ đồ án chưa
-        //     if (teacherCheckSum.includes(index)) {
-        //         t.specialize.forEach((s) => {
-        //             if (s.name.toUpperCase() === specialize.toUpperCase()) {
-        //                 compatibility = s.coincidence;
-        //             }
-        //         });
-        //         // chon do phu hop cao nhat
-        //         if (compatibility >= maxCompatibility) {
-        //             maxCompatibility = compatibility;
-        //             temp = index;
-        //         }
-        //     }
-        // });
-
         arrayT_P[project].forEach((a, idx) => {
             let compatibility = 0;
-            // console.log("các cột có tổng < 3", teacherCheckSum);
             if (teacherCheckSum.includes(idx)) {
                 compatibility = a;
                 if (compatibility >= maxCompatibility) {
@@ -145,8 +124,6 @@ export async function getArraySuitableClothes(): Promise<ResultSuccess> {
         array: array,
         assignment: assignments,
     };
-    // return success.ok(assignments);
-    console.log(array.length);
     return success.ok(result);
 }
 
@@ -197,7 +174,7 @@ export async function getArrayTeacherProject(): Promise<ResultSuccess> {
     const teachers: number[][] = (await getArraySpecializeTeacher()).data;
 
     function sum(p: number[], t: number[]): number {
-        let total: number = 0;
+        let total = 0;
 
         p.forEach((_p, idx) => {
             total += _p * t[idx];
@@ -209,7 +186,7 @@ export async function getArrayTeacherProject(): Promise<ResultSuccess> {
     const array: number[][] = [];
 
     for (const p of projects) {
-        let element: number[] = [];
+        const element: number[] = [];
         for (const t of teachers) {
             element.push(sum(p, t));
         }

@@ -1,4 +1,4 @@
 export interface ProjectReqBody {
-    name: string,
-    specialize: string,
+    name: string;
+    specialize: string;
 }

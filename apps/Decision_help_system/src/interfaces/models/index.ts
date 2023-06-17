@@ -1,2 +1,2 @@
-export * from "./project"
-export * from "./teacher"
+export * from "./project";
+export * from "./teacher";

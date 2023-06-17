@@ -3,8 +3,10 @@ export interface ITeacher {
     name: string;
     phone: string;
     email: string;
-    specialize: [{
-        name: string;
-        coincidence: number;
-    }];
+    specialize: [
+        {
+            name: string;
+            coincidence: number;
+        }
+    ];
 }

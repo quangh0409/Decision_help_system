@@ -3,8 +3,8 @@ import Project from "../models/project";
 import { v1 } from "uuid";
 
 export async function createProject(params: {
-    name: String;
-    specialize: String;
+    name: string;
+    specialize: string;
 }): Promise<Result> {
     const project = new Project({
         id: v1(),
