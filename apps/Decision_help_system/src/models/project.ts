@@ -3,9 +3,20 @@ import { IProject } from "../interfaces/models";
 
 const projectSchema = new mongoose.Schema(
     {
-        id: String,
-        name: String,
-        specialize: String,
+        id: {
+            type: String,
+            require: false,
+        },
+        name: {
+            type: String,
+            require: false,
+        },
+        specialize: [
+            {
+                type: String,
+                require: false,
+            },
+        ],
     },
     { versionKey: false }
 );

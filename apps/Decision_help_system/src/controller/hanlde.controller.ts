@@ -5,13 +5,17 @@ import Teacher from "../models/teacher";
 import { IAssignment } from "../interfaces/models/assignment";
 import { SPECIALIZE } from "../enum/specialize";
 import { isNumberObject } from "util/types";
+import { IArray_Assignment } from "../interfaces/response/assignment.body";
 
-export async function getArraySuitableClothes(): Promise<Result> {
+export async function getArraySuitableClothes(): Promise<ResultSuccess> {
     const array: number[][] = [];
 
     const teachers = await Teacher.find({}, { _id: 0 }).lean();
     const projects = await Project.find({}, { _id: 0 }).lean();
     const assignments: IAssignment[] = [];
+    const arrayT_P: number[][] = (await getArrayTeacherProject()).data;
+
+    // tính tổng cột check số lượng đồ án mà giáo viên đã đk phân công
     function sumColumn(idx: number, a: number[][]): number {
         let sum = 0;
         a.forEach((r) => {
@@ -21,7 +25,7 @@ export async function getArraySuitableClothes(): Promise<Result> {
         });
         return sum;
     }
-
+    // đánh đấu giáo viện đk phân công đồ án
     function createRow(idx: number, size: number): number[] {
         const rowProject: number[] = [];
         for (let i = 0; i < size; i++) {
@@ -31,6 +35,7 @@ export async function getArraySuitableClothes(): Promise<Result> {
         return rowProject;
     }
 
+    // kiểm tra giáo viên đã đk phân công đồ án nào chưa
     function checkAssignment(
         ass: IAssignment[],
         email: string
@@ -52,9 +57,8 @@ export async function getArraySuitableClothes(): Promise<Result> {
         let maxCompatibility: number = 0;
         let temp: number = 0;
 
-        const teacherCheckSum: number[] = [];
-
         // lay ra cac giao vien co so do an < 3
+        const teacherCheckSum: number[] = [];
         teachers.forEach((t, idx) => {
             if (sumColumn(idx, array) < 3) {
                 teacherCheckSum.push(idx);
@@ -62,20 +66,34 @@ export async function getArraySuitableClothes(): Promise<Result> {
         });
 
         // phan cong giao vien
-        teachers.forEach((t, index) => {
-            let compatibility = 0;
+        // teachers.forEach((t, index) => {
+        //     let compatibility = 0;
 
-            if (teacherCheckSum.includes(index)) {
-                t.specialize.forEach((s) => {
-                    if (s.name.toUpperCase() === specialize.toUpperCase()) {
-                        compatibility = s.coincidence;
-                    }
-                });
-                // chon do phu hop cao nhat
+        //     // check giáo viên đó đã nhận đủ đồ án chưa
+        //     if (teacherCheckSum.includes(index)) {
+        //         t.specialize.forEach((s) => {
+        //             if (s.name.toUpperCase() === specialize.toUpperCase()) {
+        //                 compatibility = s.coincidence;
+        //             }
+        //         });
+        //         // chon do phu hop cao nhat
+        //         if (compatibility >= maxCompatibility) {
+        //             maxCompatibility = compatibility;
+        //             temp = index;
+        //         }
+        //     }
+        // });
+
+        arrayT_P[project].forEach((a, idx) => {
+            let compatibility = 0;
+            // console.log("các cột có tổng < 3", teacherCheckSum);
+            if (teacherCheckSum.includes(idx)) {
+                compatibility = a;
                 if (compatibility >= maxCompatibility) {
                     maxCompatibility = compatibility;
-                    temp = index;
+                    temp = idx;
                 }
+                return success.ok(array);
             }
         });
 
@@ -109,7 +127,7 @@ export async function getArraySuitableClothes(): Promise<Result> {
     projects.forEach((p, idx) => {
         const temp = assignTheProjectToTheTeacher(
             idx,
-            p.specialize,
+            p.specialize[0],
             teachers.length
         );
         array.push(temp);
@@ -123,24 +141,24 @@ export async function getArraySuitableClothes(): Promise<Result> {
 
     array.push(sum);
 
-    return success.ok(assignments);
+    const result: IArray_Assignment = {
+        array: array,
+        assignment: assignments,
+    };
+    // return success.ok(assignments);
+    console.log(array.length);
+    return success.ok(result);
 }
 
 // thiết lập array project - specialize
 export async function getArraySpecializeProject(): Promise<ResultSuccess> {
     const array: number[][] = [];
     const projects = await Project.find({}, { _id: 0 }).lean();
-
-    // const column: (number | string)[] = ["null"];
-    // SPECIALIZE.forEach((s) => {
-    //     column.push(s);
-    // });
-    // array.push(column);
     projects.map((p) => {
         const row: number[] = [];
 
         SPECIALIZE.map((s) => {
-            if (p.specialize === s) {
+            if (p.specialize.find((ps) => ps === s)) {
                 row.push(1);
             } else {
                 row.push(0);
@@ -149,22 +167,14 @@ export async function getArraySpecializeProject(): Promise<ResultSuccess> {
         array.push(row);
     });
 
-    return success.ok({ array: array });
+    return success.ok(array);
 }
 
 // thiết lập array teacher - specialize
 export async function getArraySpecializeTeacher(): Promise<ResultSuccess> {
     const array: number[][] = [];
     const teachers = await Teacher.find({}, { _id: 0 }).lean();
-
-    // const column: (number | string)[] = ["null"];
-
-    // SPECIALIZE.forEach((s) => {
-    //     column.push(s);
-    // });
-    // array.push(column);
     teachers.map((t) => {
-        // const row: (number | string)[] = [`${t.name}`];
         const row: number[] = [];
 
         SPECIALIZE.map((s) => {
@@ -182,7 +192,7 @@ export async function getArraySpecializeTeacher(): Promise<ResultSuccess> {
 }
 
 // thiet lap array teacher - project
-export async function getArrayTeacherProject() {
+export async function getArrayTeacherProject(): Promise<ResultSuccess> {
     const projects: number[][] = (await getArraySpecializeProject()).data;
     const teachers: number[][] = (await getArraySpecializeTeacher()).data;
 
@@ -190,7 +200,7 @@ export async function getArrayTeacherProject() {
         let total: number = 0;
 
         p.forEach((_p, idx) => {
-            total += _p + t[idx];
+            total += _p * t[idx];
         });
 
         return total;
@@ -206,5 +216,5 @@ export async function getArrayTeacherProject() {
         array.push(element);
     }
 
-    return array;
+    return success.ok(array);
 }

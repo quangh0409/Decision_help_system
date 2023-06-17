@@ -19,7 +19,5 @@ export async function createProject(params: {
 
 export async function getAllProject(): Promise<Result> {
     const projects = await Project.find({}, { _id: 0 }).lean();
-    console.log(projects.length);
-
     return success.ok(projects);
 }
