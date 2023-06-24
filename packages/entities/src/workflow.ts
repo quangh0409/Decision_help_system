@@ -26,15 +26,17 @@ export interface IEdge {
     before_rule?: string;
     during_rule?: string;
     transition?: ITransition;
-    actions?: [{
-        type: string,
-        email_template: string,
-        params: {
-            type: string,
-            value: string[],
-            name: string
-        }[]
-    }]
+    actions?: [
+        {
+            type: string;
+            email_template: string;
+            params: {
+                type: string;
+                value: string[];
+                name: string;
+            }[];
+        }
+    ];
 }
 
 export interface INode {

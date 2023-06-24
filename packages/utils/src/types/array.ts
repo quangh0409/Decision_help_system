@@ -13,4 +13,4 @@ declare global {
 
 Array.prototype[equal] = equalImpl;
 
-export { };
+export {};

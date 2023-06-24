@@ -11,6 +11,14 @@ const projectSchema = new mongoose.Schema(
             type: String,
             require: false,
         },
+        teacher_name: {
+            type: String,
+            require: false,
+        },
+        teacher_email: {
+            type: String,
+            require: false,
+        },
         specialize: [
             {
                 type: String,

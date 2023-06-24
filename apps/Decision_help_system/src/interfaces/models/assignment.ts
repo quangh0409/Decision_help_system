@@ -5,6 +5,8 @@ export interface IAssignment {
     project: [
         {
             name: string;
+            teacher_name: string;
+            teacher_email: string;
             specialize: string;
             coincidence: number;
         }

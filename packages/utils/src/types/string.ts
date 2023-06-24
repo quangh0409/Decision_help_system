@@ -19,17 +19,17 @@ function parseImpl(
 }
 
 function isNumericImpl(this: string) {
-    return !isNaN(parseInt(this)) && !isNaN(parseFloat(this))
+    return !isNaN(parseInt(this)) && !isNaN(parseFloat(this));
 }
 
 declare global {
     interface String {
         [parse]: typeof parseImpl;
-        [isNumeric]: typeof isNumericImpl
+        [isNumeric]: typeof isNumericImpl;
     }
 }
 
 String.prototype[parse] = parseImpl;
 String.prototype[isNumeric] = isNumericImpl;
 
-export { };
+export {};

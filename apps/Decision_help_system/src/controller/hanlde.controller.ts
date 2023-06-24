@@ -49,6 +49,7 @@ export async function getArraySuitableClothes(): Promise<ResultSuccess> {
 
     function assignTheProjectToTheTeacher(
         project: number,
+        email: string,
         specialize: string,
         size: number
     ): number[] {
@@ -58,7 +59,7 @@ export async function getArraySuitableClothes(): Promise<ResultSuccess> {
         // lay ra cac giao vien co so do an < 3
         const teacherCheckSum: number[] = [];
         teachers.forEach((t, idx) => {
-            if (sumColumn(idx, array) < 3) {
+            if (sumColumn(idx, array) < 3 && t.email !== email) {
                 teacherCheckSum.push(idx);
             }
         });
@@ -86,6 +87,8 @@ export async function getArraySuitableClothes(): Promise<ResultSuccess> {
                 project: [
                     {
                         name: projects[project].name,
+                        teacher_email: projects[project].teacher_email,
+                        teacher_name: projects[project].teacher_name,
                         specialize: specialize,
                         coincidence: maxCompatibility,
                     },
@@ -95,6 +98,8 @@ export async function getArraySuitableClothes(): Promise<ResultSuccess> {
         } else {
             decision.project.push({
                 name: projects[project].name,
+                teacher_email: projects[project].teacher_email,
+                teacher_name: projects[project].teacher_name,
                 specialize: specialize,
                 coincidence: maxCompatibility,
             });
@@ -106,6 +111,7 @@ export async function getArraySuitableClothes(): Promise<ResultSuccess> {
     projects.forEach((p, idx) => {
         const temp = assignTheProjectToTheTeacher(
             idx,
+            p.teacher_email,
             p.specialize[0],
             teachers.length
         );
