@@ -59,7 +59,7 @@ export async function getArraySuitableClothes(): Promise<ResultSuccess> {
         // lay ra cac giao vien co so do an < 3
         const teacherCheckSum: number[] = [];
         teachers.forEach((t, idx) => {
-            if (sumColumn(idx, array) < 3 && t.email !== email) {
+            if (sumColumn(idx, array) < 5 && t.email !== email) {
                 teacherCheckSum.push(idx);
             }
         });
